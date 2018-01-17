@@ -5,7 +5,7 @@ January 2018
 MIT Licence 
 --}
 
-module NN(neuron,relu,sigmoid,dot,multTup,ifn,windows)
+module NeuralNetwork.NN(neuron,relu,sigmoid,dot,multTup,ifn,windows,truncRelu)
 where 
 
 -- inputs     : inputs 
@@ -20,6 +20,10 @@ neuron inputs weights bias wia activation = activation (wia ([1]++inputs) ([bias
 relu :: (Ord a, Num a) => a -> a
 relu x = max x 0
 
+truncRelu x
+    | x <= 0 = 0
+    | otherwise = 1
+
 sigmoid :: (Integral t, Floating p) => t -> p
 sigmoid x
     | x >= 0 = sig
@@ -27,6 +31,12 @@ sigmoid x
     where sig = 1 / (1+ (1/(exp 1)^(x)) )     
     
 ifn x = x
+
+softmax :: (Floating b) => [b] -> [b]
+softmax z = map (/bot) top
+            where top = map exp z
+                  bot = sum top
+-- softmax [1,2,3,4,1,2,3] 
 -----------------------------------------------
 
 -- ### Aggrigation Functions ###
@@ -36,6 +46,15 @@ multTup tup = (fst tup) * (snd tup)
 
 ----------------------------------------------------
 
+-- ### Neural Networks ###
+-- Layers
+   -- Number of neurons. 
+   -- Inputs/Outputs
+-- 6 -> 6 -> 2
+
+----------------------------------------------------
+
+-- ### Helper Functions ###
 windows _ [] = []
 windows n (x:xs)
     | (length xs) > (n-2) = [x:(take (n-1) xs)]++(windows n xs)
@@ -52,3 +71,4 @@ win n l
     | null l = []
     | otherwise = (filter (\lx -> length lx == n) $ (take n l):(win n $ drop 1 l))
 --}
+----------------------------------------------------

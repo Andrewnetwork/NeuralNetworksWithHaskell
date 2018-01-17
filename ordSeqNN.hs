@@ -7,9 +7,13 @@ MIT Licence
 Task: Ordered List Recognizer 
 Given three real numbers [x,y,z], create a neural network that outputs True when x<y<z and
 outputs False otherwise. 
+
+This is a feed-forward neural network, but it is sparsely connected, as opposed to fully connected, as all neurons 
+do not have connections to all elements in the prior layer. In fcFFNSeqNN.hs we show how to create a functionally 
+equivalent network which is a fully connected feed-forward neural network. 
 --}
 
-import NN
+import NeuralNetwork.NN
 
 -- From: ordSeq.hs
 ltn i = neuron i [-1,1] 0 dot truncRelu
@@ -31,7 +35,8 @@ applyNeuron :: (t1 -> t2, t1) -> t2
 applyNeuron ls = (fst ls) (snd ls)
 
 firstLayer xs = map applyNeuron ( zip [ltn,ltn] (windows 2 xs) )
--- [ (ltn,[1,2]), (ltn,[2,3]) ]
+-- ( zip [ltn,ltn] (windows 2 xs) ) -> [ (ltn,[1,2]), (ltn,[2,3]) ]
+-- firstLayer xs - > [1,1]
 
 secondLayer xs = andn (firstLayer xs) 
 
@@ -43,6 +48,10 @@ ordSeqNet xs = secondLayer xs
 -- 0 1 | 0
 -- 1 0 | 0
 -- 1 1 | 1
+
+-- How do we implement the same network as a fully connected neural network instead of 
+-- a sparsely connected one as seen in the definition of firstLayer above. 
+
 
 -- Task: to extend the application of our network to lists of a lengths which are multiples of 3. 
 nNetwork x 
