@@ -5,7 +5,7 @@ January 2018
 MIT Licence 
 --}
 
-module NN(neuron,relu,sigmoid,dot,multTup,ifn)
+module NN(neuron,relu,sigmoid,dot,multTup,ifn,windows)
 where 
 
 -- inputs     : inputs 
@@ -35,3 +35,20 @@ dot i w = sum (map multTup (zip i w) )
 multTup tup = (fst tup) * (snd tup)
 
 ----------------------------------------------------
+
+windows _ [] = []
+windows n (x:xs)
+    | (length xs) > (n-2) = [x:(take (n-1) xs)]++(windows n xs)
+    | otherwise = []
+    
+-- [[x]:(take n xs)]++(windows xs)
+-- windows 2 [1,2,3] -> [ [1,2] , [2,3] ]
+-- windows 3 [1,2,3] -> [ [1,2,3] ]
+
+{--
+Contributed by twitch WorldSEnder
+win :: Int -> [a] -> [[a]]
+win n l 
+    | null l = []
+    | otherwise = (filter (\lx -> length lx == n) $ (take n l):(win n $ drop 1 l))
+--}

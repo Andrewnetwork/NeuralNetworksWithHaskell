@@ -15,6 +15,3 @@ import NN
 --n1 i = neuron i [1,1..] ifn (\tup -> tup)
 
 a2n i = neuron i [2,2..] 0 weightedSum ifn 
-
--
-
