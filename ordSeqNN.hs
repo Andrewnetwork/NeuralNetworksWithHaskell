@@ -24,15 +24,9 @@ andn i = neuron i [1,1] (-1) dot truncRelu
 -- Task: Find weights and a bias that makes truncRelu(i0*w0 + i1*w1 + i2*w2) 
 -- positive when i0 = i1 = 1 and negative otherwise. 
 
-truncRelu x
-    | x <= 0 = 0
-    | otherwise = 1
-
 -- pairize [1,2,3] -> [[1,2],[2,3]]
 
 -- ls: (fn,ls)
-applyNeuron :: (t1 -> t2, t1) -> t2
-applyNeuron ls = (fst ls) (snd ls)
 
 firstLayer xs = map applyNeuron ( zip [ltn,ltn] (windows 2 xs) )
 -- ( zip [ltn,ltn] (windows 2 xs) ) -> [ (ltn,[1,2]), (ltn,[2,3]) ]

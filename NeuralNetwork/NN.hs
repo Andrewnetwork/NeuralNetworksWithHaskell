@@ -5,8 +5,20 @@ January 2018
 MIT Licence 
 --}
 
-module NeuralNetwork.NN(neuron,relu,sigmoid,dot,multTup,ifn,windows,truncRelu)
+module NeuralNetwork.NN(neuron,relu,sigmoid,dot,multTup,ifn,windows,truncRelu,applyNeuron,layer,Neuron(..),activate )
 where 
+
+import Text.Show.Functions
+
+type WIA a = [a] -> [a] -> a
+type Activation a = a -> a
+
+data Neuron = Neuron {inputs::[Float]
+                        ,weights::[Float] 
+                        ,bias::Float
+                        ,wia::WIA Float
+                        ,activation::Activation Float
+                    } deriving (Show)
 
 -- inputs     : inputs 
 -- weights    : weights
@@ -15,6 +27,16 @@ where
 neuron inputs weights bias wia activation = activation (wia ([1]++inputs) ([bias]++weights) )
 -- Example: neuron [1,1,1,1] [2,2,2,2] weightedSum sigmoid
 -- Example: neuron [1] [1] 0 weightedSum ifn 
+
+activate (Neuron inputs weights bias wia activation) = neuron inputs weights bias wia activation
+
+
+
+layer neurons inputs inputSize = map applyNeuron ( zip neurons (windows inputSize inputs) )
+
+applyNeuron :: (t1 -> t2, t1) -> t2
+applyNeuron ls = (fst ls) (snd ls)
+
 
 -- ### Activation Functions ###
 relu :: (Ord a, Num a) => a -> a
@@ -40,7 +62,7 @@ softmax z = map (/bot) top
 -----------------------------------------------
 
 -- ### Aggrigation Functions ###
-
+dot :: Num a => [a] -> [a] -> a
 dot i w = sum (map multTup (zip i w) )
 multTup tup = (fst tup) * (snd tup)
 
