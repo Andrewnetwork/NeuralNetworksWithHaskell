@@ -13,3 +13,40 @@ createNeurons init n
     where res = neuroAug init
 
 -- createNeurons (nt [1,2,3,4]) 3
+evalError :: Neuron -> [Float] -> Float
+--evalError n inVal = identError (activate n inVal) inVal
+evalError n inVal = mult2Error (activate n inVal) inVal
+
+-- How do we converge to the identity neuron. 
+
+{--
+identityN i = neuron i [0] 0 dot ifn 
+identError output input = output - (head input)
+evalError inVal = identError (identityN inVal) inVal
+--}
+
+identError output input = output - (head input)
+mult2Error output input = output - ((head input)*2)
+
+initN = Neuron [0] 0 dot ifn
+identN = Neuron [1] 0 dot ifn
+m2N = Neuron [2] 0 dot ifn
+-- activate identN [1] 
+
+
+l1 = convLoop initNeuron [[0,0],[0,1],[1,0],[1,1]] [-1,-1,-1,1] 
+l2 = convLoop (last l1) [[0,0],[0,1],[1,0],[1,1]] [-1,-1,-1,1] 
+l3 = convLoop (last l2) [[0,0],[0,1],[1,0],[1,1]] [-1,-1,-1,1] 
+l4 = convLoop (last l3) [[0,0],[0,1],[1,0],[1,1]] [-1,-1,-1,1] 
+
+
+[[[([0.0,0.0],0.0),([0.0,0.0],0.0),([0.0,0.0],0.0),([1.0,1.0],1.0)]],
+[[([1.0,1.0],0.0),([1.0,0.0],-1.0),([1.0,0.0],-1.0),([2.0,1.0],0.0)]],
+[[([2.0,1.0],0.0),([2.0,0.0],-1.0),([1.0,0.0],-2.0),([2.0,1.0],-1.0)]],
+[[([2.0,1.0],-1.0),([2.0,1.0],-1.0),([1.0,1.0],-2.0),([2.0,2.0],-1.0)]],
+[[([2.0,2.0],-1.0),([2.0,1.0],-2.0),([2.0,1.0],-2.0),([2.0,1.0],-2.0)]],
+[[([2.0,1.0],-2.0),([2.0,1.0],-2.0),([2.0,1.0],-2.0),([2.0,1.0],-2.0)]],
+[[([2.0,1.0],-2.0),([2.0,1.0],-2.0),([2.0,1.0],-2.0),([2.0,1.0],-2.0)]],
+[[([2.0,1.0],-2.0),([2.0,1.0],-2.0),([2.0,1.0],-2.0),([2.0,1.0],-2.0)]],
+[[([2.0,1.0],-2.0),([2.0,1.0],-2.0),([2.0,1.0],-2.0),([2.0,1.0],-2.0)]],
+[[([2.0,1.0],-2.0),([2.0,1.0],-2.0),([2.0,1.0],-2.0),([2.0,1.0],-2.0)]]]

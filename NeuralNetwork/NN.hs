@@ -5,7 +5,7 @@ January 2018
 MIT Licence 
 --}
 
-module NeuralNetwork.NN(neuron,relu,sigmoid,dot,multTup,ifn,windows,truncRelu,applyNeuron,layer,Neuron(..),activate )
+module NeuralNetwork.NN(neuron,relu,sigmoid,dot,multTup,ifn,windows,truncRelu,applyNeuron,layer,Neuron(..),activate)
 where 
 
 import Text.Show.Functions
@@ -13,13 +13,14 @@ import Text.Show.Functions
 type WIA a = [a] -> [a] -> a
 type Activation a = a -> a
 
-data Neuron = Neuron {inputs::[Float]
-                        ,weights::[Float] 
+data Neuron = Neuron { weights::[Float] 
                         ,bias::Float
                         ,wia::WIA Float
                         ,activation::Activation Float
                     } deriving (Show)
 
+
+--(Neuron w1 b1 _ _) == (Neuron w2 b2 _ _) = True
 -- inputs     : inputs 
 -- weights    : weights
 -- activation : activation function
@@ -28,15 +29,29 @@ neuron inputs weights bias wia activation = activation (wia ([1]++inputs) ([bias
 -- Example: neuron [1,1,1,1] [2,2,2,2] weightedSum sigmoid
 -- Example: neuron [1] [1] 0 weightedSum ifn 
 
-activate (Neuron inputs weights bias wia activation) = neuron inputs weights bias wia activation
-
+activate (Neuron weights bias wia activation) inputs = neuron inputs weights bias wia activation
 
 
 layer neurons inputs inputSize = map applyNeuron ( zip neurons (windows inputSize inputs) )
 
 applyNeuron :: (t1 -> t2, t1) -> t2
 applyNeuron ls = (fst ls) (snd ls)
+-- ### Auto Chain Rule ###
+{--
+    Given the output of our neuron and weights, how can 
+    we change our weights to reduce error? 
 
+    Example: 
+
+    
+--}
+
+-------------------------------------
+
+
+-- ### Cost Functions ###
+
+-------------------------------------------
 
 -- ### Activation Functions ###
 relu :: (Ord a, Num a) => a -> a
@@ -58,6 +73,8 @@ softmax :: (Floating b) => [b] -> [b]
 softmax z = map (/bot) top
             where top = map exp z
                   bot = sum top
+
+
 -- softmax [1,2,3,4,1,2,3] 
 -----------------------------------------------
 
