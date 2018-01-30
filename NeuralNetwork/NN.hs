@@ -5,7 +5,8 @@ January 2018
 MIT Licence 
 --}
 
-module NeuralNetwork.NN(neuron,relu,sigmoid,dot,multTup,ifn,windows,truncRelu,applyNeuron,layer,Neuron(..),activate)
+module NeuralNetwork.NN(neuron,relu,sigmoid,dot,multTup,ifn,windows,
+truncRelu,applyNeuron,layer,Neuron(..),activate,getParams,takeWhile')
 where 
 
 import Text.Show.Functions
@@ -17,8 +18,17 @@ data Neuron = Neuron { weights::[Float]
                         ,bias::Float
                         ,wia::WIA Float
                         ,activation::Activation Float
-                    } deriving (Show)
+                    } 
 
+instance Eq Neuron where 
+    Neuron w1 b1 _ _ == Neuron w2 b2 _ _ = w1 == w2 && b1 == b2
+    Neuron w1 b1 _ _ /= Neuron w2 b2 _ _ = w1 == w2 && b1 == b2
+
+instance Show Neuron where 
+    show (Neuron weights bias _ _) = show weights ++ " | " ++ show bias
+
+getParams :: Neuron -> ([Float], Float)
+getParams (Neuron weights bias _ _ ) = (weights,bias)
 
 --(Neuron w1 b1 _ _) == (Neuron w2 b2 _ _) = True
 -- inputs     : inputs 
@@ -66,15 +76,14 @@ sigmoid x
     | x >= 0 = sig
     | otherwise = - sigmoid (-x)
     where sig = 1 / (1+ (1/(exp 1)^(x)) )     
-    
+
+ifn :: p -> p
 ifn x = x
 
 softmax :: (Floating b) => [b] -> [b]
 softmax z = map (/bot) top
             where top = map exp z
                   bot = sum top
-
-
 -- softmax [1,2,3,4,1,2,3] 
 -----------------------------------------------
 
@@ -94,6 +103,7 @@ multTup tup = (fst tup) * (snd tup)
 ----------------------------------------------------
 
 -- ### Helper Functions ###
+windows :: Int -> [a] -> [[a]]
 windows _ [] = []
 windows n (x:xs)
     | (length xs) > (n-2) = [x:(take (n-1) xs)]++(windows n xs)
@@ -103,11 +113,9 @@ windows n (x:xs)
 -- windows 2 [1,2,3] -> [ [1,2] , [2,3] ]
 -- windows 3 [1,2,3] -> [ [1,2,3] ]
 
-{--
-Contributed by twitch WorldSEnder
-win :: Int -> [a] -> [[a]]
-win n l 
-    | null l = []
-    | otherwise = (filter (\lx -> length lx == n) $ (take n l):(win n $ drop 1 l))
---}
+takeWhile' :: (a -> Bool) -> [a] -> [a]
+takeWhile' pred [] = []
+takeWhile' pred (x:xs) 
+    | pred x = x : (takeWhile' pred xs)
+    | otherwise = [x]
 ----------------------------------------------------

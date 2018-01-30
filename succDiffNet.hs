@@ -10,6 +10,9 @@
     
     Example:
     rdNet [1,4,9,16,25 ] -> [[3,5,7,9],[2,2,2],[0,0],[0]]
+
+    This can be used with the work https://github.com/Andrewnetwork/GeneratorFunctions 
+    in order to learn the generating function for polynomic sequences given a sufficient subset. 
     
 --}
 
