@@ -1,12 +1,12 @@
 {--
-ordSeq.hs
-Andrew Ribeiro 
-January 2018
-MIT Licence 
+    ordSeq.hs
+    Andrew Ribeiro 
+    January 2018
+    MIT Licence 
 
-Task: Ordered List Recognizer 
-Given three real numbers [x,y,z], create a neural network that outputs True when x<y<z and
-outputs False otherwise. 
+    Task: Ordered List Recognizer 
+    Given three real numbers [x,y,z], create a neural network that outputs True when x<y<z and
+    outputs False otherwise. 
 --}
 
 import NN

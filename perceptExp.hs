@@ -94,10 +94,6 @@ xorP (a,b) = andP (orP a b) (orP (notP a) (notP b) )
 -- map xorP [(0,0),(0,1),(1,0),(1,1)]
 
 
--- #### Multi-Layer Perceptrons #######
-
-
-
 
 
 
