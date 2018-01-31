@@ -71,6 +71,29 @@ orPerceptron = perceptron [1.0,1.0] (0)
 -- Famously does not converge!
 -- perceptConv initPerceptron2 [[0,0],[0,1],[1,0],[1,1]] [-1,1,1,-1] 1000
 
+-- In boolean algebra, XOR can be represented as a composition of boolean funcitons. 
+-- (A + B) * (~A + ~B)
+-- Where + is or, ~ is not, and * is and. We have trained boolean functions above for these
+-- operations and can use them to produce an xor function as follows: 
+-- NOTE: We must translate the values of our perceptrons to their proper boolean classes.
+-- As in our perceptrons, the zero class is represented as -1. 
+
+translate :: (Eq a, Num a, Num p) => a -> p
+translate v
+    | v == -1 = 0
+    | otherwise = 1
+
+andP a b = translate (activate andPerceptron [a,b])
+
+orP a b = translate (activate orPerceptron [a,b])
+
+notP a = translate ( activate notPerceptron [a] )
+
+xorP :: Num p => (Float, Float) -> p
+xorP (a,b) = andP (orP a b) (orP (notP a) (notP b) )
+-- map xorP [(0,0),(0,1),(1,0),(1,1)]
+
+
 -- #### Multi-Layer Perceptrons #######
 
 
