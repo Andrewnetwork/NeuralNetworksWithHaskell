@@ -59,3 +59,15 @@ win n l
 [[[0.0,0.0] | 0.0,[0.0,1.0] | 1.0,[0.0,1.0] | 1.0,[0.0,1.0] | 1.0],
 [[0.0,1.0] | 0.0,[0.0,1.0] | 0.0,[1.0,1.0] | 1.0,[1.0,1.0] | 1.0],
 [[1.0,1.0] | 0.0,[1.0,1.0] | 0.0,[1.0,1.0] | 0.0,[1.0,1.0] | 0.0]]
+
+-- map (map getParams) (perceptConv initPerceptron [[0,0],[0,1],[1,0],[1,1]] [-1,-1,-1,1] 10 
+
+--        l1 = coinnvLoop itNeuron [[0,0],[0,1],[1,0],[1,1]] [-1,-1,-1,1] 
+
+-- map getParams l1
+-- map getParams ( convLoop initNeuron [[0,0],[0,1],[1,0],[1,1]] [-1,-1,-1,1] )
+-- convLoop initNeuron inputV labelV
+
+
+
+-- map getWeights (convLoop initN [10] 10)

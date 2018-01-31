@@ -1,12 +1,12 @@
 {--
-main.hs
-Andrew Ribeiro 
-January 2018
-MIT Licence 
+    NN.hs
+    Andrew Ribeiro 
+    January 2018
+    MIT Licence 
 --}
 
 module NeuralNetwork.NN(neuron,relu,sigmoid,dot,multTup,ifn,windows,
-truncRelu,applyNeuron,layer,Neuron(..),activate,getParams,takeWhile')
+truncRelu,applyNeuron,layer,Neuron(..),activate,getParams,takeWhile',addWeights)
 where 
 
 import Text.Show.Functions
@@ -25,10 +25,19 @@ instance Eq Neuron where
     Neuron w1 b1 _ _ /= Neuron w2 b2 _ _ = w1 == w2 && b1 == b2
 
 instance Show Neuron where 
-    show (Neuron weights bias _ _) = show weights ++ " | " ++ show bias
+    show (Neuron weights bias _ _) = "\n"++"|"++show weights ++ ":" ++ show bias ++ "|"
 
 getParams :: Neuron -> ([Float], Float)
 getParams (Neuron weights bias _ _ ) = (weights,bias)
+
+
+-- Adds a vector to the weights and scalar to the bias of a neuron and
+-- returns a new neuron.
+addWeights :: Neuron -> [Float] -> Float -> Neuron
+addWeights (Neuron weights bias wia act ) updateWeightVect updateBias = 
+    Neuron (map (\(l,r)->l+r) (zip weights updateWeightVect)) (bias+updateBias) wia act
+-- Twitch Lumie1337: Ex- (\(l,r)->l+r) can be replaced with uncurry (+).
+
 
 --(Neuron w1 b1 _ _) == (Neuron w2 b2 _ _) = True
 -- inputs     : inputs 

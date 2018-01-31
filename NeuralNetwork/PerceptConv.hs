@@ -1,5 +1,5 @@
 {--
-    perceptConv.hs
+    PerceptConv.hs
     Andrew Ribeiro 
     January 2018
     MIT Licence
@@ -10,8 +10,10 @@
     We take a linear neuron that produces a binary output and adjust its 
     weights by itterating over labeled training vectors. 
 --}
-
+module NeuralNetwork.PerceptConv(sgn,perceptConv',perceptConv,perceptron) where 
 import NeuralNetwork.NN
+
+perceptron weights bias = Neuron weights bias dot sgn 
 
 -- Our linear threshold activation function. 
 -- Returns either 1 or -1. 
@@ -24,13 +26,6 @@ sgn x
 initPerceptron = Neuron [0,0] 0 dot sgn
 -- We can activate any neuron/perceptron with some input data by using the function:
 -- activate initPerceptron [1,1]
-
--- Adds a vector to the weights and scalar to the bias of a neuron and
--- returns a new neuron.
-addWeights :: Neuron -> [Float] -> Float -> Neuron
-addWeights (Neuron weights bias wia act ) updateWeightVect updateBias = 
-    Neuron (map (\(l,r)->l+r) (zip weights updateWeightVect)) (bias+updateBias) wia act
--- Twitch Lumie1337: Ex- (\(l,r)->l+r) can be replaced with uncurry (+).
 
 -- The innter most operation of the perceptron convergence procedure. 
 -- Updates the weights of the neuron in respect to the class label. 
@@ -56,73 +51,17 @@ perceptConv' initNeuron inputVect labelVector nItter
     where convStepRes = convLoop initNeuron inputVect labelVector 
 -- perceptConv' initPerceptron [[0,0],[0,1],[1,0],[1,1]] [-1,-1,-1,1] 4 
 
+-- If a layer of neurons is all the same, we have converged. 
 convergenceCond :: [Neuron] -> Bool
 convergenceCond itter = foldl (&&) True (map (== (head itter)) (tail itter))
 
 perceptConv :: Neuron -> [[Float]] -> [Float] -> Int -> (Bool, Int, Neuron)
 perceptConv initNeuron inputVect labelVector maxItter
-    | resLen < maxItter = (True, resLen+1, (last.last) convRes)
+    | resLen < maxItter = (True, resLen, (last.last) convRes)
     | otherwise = (False, resLen, initNeuron)
     where process = perceptConv' initNeuron inputVect labelVector maxItter
           convRes = takeWhile' (not.convergenceCond) process
           resLen = length convRes
 -- perceptConv initPerceptron [[0,0],[0,1],[1,0],[1,1]] [-1,-1,-1,1] 10 
-
--- Boolean And Perceptron 
--- Truth table for And
--- L R | L && R
--- 0 0 | 0 
--- 0 1 | 0 
--- 1 0 | 0 
--- 1 1 | 1 
-
--- The and perceptron with weights/baias learned through
--- the perceptron convergence procedure implemented here. 
-andPerceptron = Neuron [2.0,1.0] (-2.0) dot sgn
--- map (activate andPerceptron) [[0,0],[0,1],[1,0],[1,1]] -> [-1.0,-1.0,-1.0,1.0]
--- The above result shows that this neuron has correctly learned the boolean and function. 
--- With -1 representing the 0 class and 1 representing the 1 class. 
-
--- Boolean Or Perceptron 
--- Truth table for And
--- L R | L || R
--- 0 0 | 0 
--- 0 1 | 1
--- 1 0 | 1
--- 1 1 | 1 
--- perceptConv initPerceptron [[0,0],[0,1],[1,0],[1,1]] [-1,1,1,1] 10 
-orPerceptron = Neuron [1.0,1.0] (0) dot sgn
--- map (activate orPerceptron) [[0,0],[0,1],[1,0],[1,1]] 
-
-
--- Boolean Or Perceptron 
--- Truth table for XOR 
--- L R | L || R
--- 0 0 | 0 
--- 0 1 | 1
--- 1 0 | 1
--- 1 1 | 0 
-
--- perceptConv initPerceptron [[0,0],[0,1],[1,0],[1,1]] [-1,1,1,-1] 10 
-
-
-
-
--- perceptConv initPerceptron [[0],[1]] [-1,1] 10 
-
-
--- map (map getParams) (perceptConv initPerceptron [[0,0],[0,1],[1,0],[1,1]] [-1,-1,-1,1] 10 
-
---        l1 = coinnvLoop itNeuron [[0,0],[0,1],[1,0],[1,1]] [-1,-1,-1,1] 
-
--- map getParams l1
--- map getParams ( convLoop initNeuron [[0,0],[0,1],[1,0],[1,1]] [-1,-1,-1,1] )
--- convLoop initNeuron inputV labelV
-
-
-
--- map getWeights (convLoop initN [10] 10)
-
-
 
 
